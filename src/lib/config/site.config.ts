@@ -4,8 +4,8 @@ export const siteConfig: SiteConfig = {
   name: "Page Picker",
   title: "Page Picker - Your PDF Assistant",
   description: "Page Picker is a tool that allows you to extract specific pages from your PDF documents.",
-  origin: "",
-  og: "",
+  origin: "https://picker.sachi.dev",
+  og: "https://picker.sachi.dev/og.png",
   keywords: ["pdf", "extraction", "page picker", "document", "tool", "pdf tool", "pdf extraction", "pdf page extraction", "pdf page picker"],
   creator: {
     name: "Sachii",
