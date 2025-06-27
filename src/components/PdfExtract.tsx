@@ -5,21 +5,16 @@ import { Scissors, Eye, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-// Hooks
 import { useFileUpload, usePageValidation, usePdfProcessor } from "@/lib/hooks";
-
-// Components
 import {
   FileUploadArea,
   FileDetails,
   PageRangeSelector,
   ExtractionSummary,
-  PreviewDialog
+  PreviewDialog,
 } from "./pdf";
 
 const PDFPageExtractor = () => {
-  // File upload state and handlers
   const {
     file,
     totalPages,
@@ -34,7 +29,6 @@ const PDFPageExtractor = () => {
     setError,
   } = useFileUpload();
 
-  // Page validation state and handlers
   const {
     startPage,
     endPage,
@@ -47,7 +41,6 @@ const PDFPageExtractor = () => {
     resetPages,
   } = usePageValidation(totalPages);
 
-  // PDF processing state and handlers
   const {
     isProcessing,
     showPreview,
@@ -58,7 +51,6 @@ const PDFPageExtractor = () => {
     closePreview,
   } = usePdfProcessor();
 
-  // Reset pages when file changes
   useEffect(() => {
     if (file && totalPages > 0) {
       resetPages();
@@ -76,7 +68,7 @@ const PDFPageExtractor = () => {
     }
 
     setError("");
-    
+
     try {
       await processExtraction(file, validatedPageRange);
     } catch {
@@ -98,8 +90,6 @@ const PDFPageExtractor = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-2xl space-y-8">
-        
-        {/* Header */}
         <div className="text-center space-y-3">
           <div className="flex items-center justify-center">
             <div className="p-3 bg-primary/10 rounded-full">
@@ -107,10 +97,11 @@ const PDFPageExtractor = () => {
             </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Page Picker</h1>
-          <p className="text-muted-foreground">Extract specific pages from your PDF documents</p>
+          <p className="text-muted-foreground">
+            Extract specific pages from your PDF documents
+          </p>
         </div>
 
-        {/* Main Card */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -119,8 +110,6 @@ const PDFPageExtractor = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-
-            {/* Error Alert */}
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -128,7 +117,6 @@ const PDFPageExtractor = () => {
               </Alert>
             )}
 
-            {/* File Upload or Document Processing */}
             {!file ? (
               <FileUploadArea
                 isDragOver={isDragOver}
@@ -141,15 +129,12 @@ const PDFPageExtractor = () => {
               />
             ) : (
               <div className="space-y-6">
-                
-                {/* File Details */}
                 <FileDetails
                   fileName={file.name}
                   totalPages={totalPages}
                   onReset={resetApp}
                 />
 
-                {/* Page Range Selector */}
                 <PageRangeSelector
                   startPage={startPage}
                   endPage={endPage}
@@ -159,11 +144,7 @@ const PDFPageExtractor = () => {
                   onStartPageChange={handleStartPageChange}
                   onEndPageChange={handleEndPageChange}
                 />
-                
-                {/* Extraction Summary */}
                 <ExtractionSummary pageRange={validatedPageRange} />
-
-                {/* Extract Button */}
                 <Button
                   onClick={handleExtractPages}
                   disabled={isProcessing || !isValidRange}
@@ -182,21 +163,17 @@ const PDFPageExtractor = () => {
                     </>
                   )}
                 </Button>
-
               </div>
             )}
-
           </CardContent>
         </Card>
 
-        {/* Footer */}
         <p className="text-center text-sm text-muted-foreground">
-          All processing happens locally in your browser. Your files never leave your device.
+          All processing happens locally in your browser. Your files never leave
+          your device.
         </p>
-
       </div>
 
-      {/* Preview Dialog */}
       <PreviewDialog
         isOpen={showPreview}
         onClose={closePreview}
@@ -210,4 +187,4 @@ const PDFPageExtractor = () => {
   );
 };
 
-export default PDFPageExtractor; 
+export default PDFPageExtractor;

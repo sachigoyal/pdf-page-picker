@@ -12,8 +12,6 @@ export const usePageValidation = (totalPages: number) => {
       setStartPage(value);
       const validation = validatePageNumber(value, totalPages, endPage, true);
       setStartPageError(validation.error);
-      
-      // Re-validate end page when start page changes
       if (endPage !== "") {
         const endValidation = validatePageNumber(endPage, totalPages, value, false);
         setEndPageError(endValidation.error);
@@ -27,8 +25,6 @@ export const usePageValidation = (totalPages: number) => {
       setEndPage(value);
       const validation = validatePageNumber(value, totalPages, startPage, false);
       setEndPageError(validation.error);
-      
-      // Re-validate start page when end page changes
       if (startPage !== "") {
         const startValidation = validatePageNumber(startPage, totalPages, value, true);
         setStartPageError(startValidation.error);
