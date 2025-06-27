@@ -30,6 +30,7 @@ const PDFPageExtractor = () => {
   const [extractedPdfBytes, setExtractedPdfBytes] = useState<Uint8Array | null>(
     null
   );
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (
@@ -57,6 +58,53 @@ const PDFPageExtractor = () => {
     } catch (err) {
       setError("Failed to load PDF. Please try another file.");
       console.error("PDF loading error:", err);
+    }
+  };
+
+  const processFile = async (file: File) => {
+    if (file.type !== "application/pdf") {
+      setError("Please upload a PDF file only.");
+      return;
+    }
+
+    setError("");
+    setFile(file);
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const pageCount = pdfDoc.getPageCount();
+
+      setTotalPages(pageCount);
+      setStartPage(1);
+      setEndPage(pageCount);
+    } catch (err) {
+      setError("Failed to load PDF. Please try another file.");
+      console.error("PDF loading error:", err);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const droppedFile = files[0];
+      processFile(droppedFile);
     }
   };
 
@@ -166,14 +214,34 @@ const PDFPageExtractor = () => {
 
             {!file ? (
               <div 
-                className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-12 text-center hover:border-muted-foreground/50 transition-colors cursor-pointer group"
+                className={`border-2 border-dashed rounded-lg p-12 text-center transition-all cursor-pointer group ${
+                  isDragOver 
+                    ? 'border-primary bg-primary/5 scale-105' 
+                    : 'border-muted-foreground/25 hover:border-muted-foreground/50'
+                }`}
                 onClick={() => fileInputRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
               >
-                <Upload className="mx-auto h-12 w-12 text-muted-foreground group-hover:text-foreground transition-colors mb-4" />
-                <h3 className="text-lg font-semibold mb-2">Choose PDF File</h3>
-                <p className="text-muted-foreground mb-4">Drag and drop your PDF here, or click to browse</p>
-                <Button variant="outline">
-                  <FileText className="mr-2 h-4 w-4" />
+                <Upload className={`mx-auto h-12 w-12 mb-4 transition-colors ${
+                  isDragOver 
+                    ? 'text-primary' 
+                    : 'text-muted-foreground group-hover:text-foreground'
+                }`} />
+                <h3 className={`text-lg font-semibold mb-2 ${
+                  isDragOver ? 'text-primary' : ''
+                }`}>
+                  {isDragOver ? 'Drop your PDF here' : 'Choose PDF File'}
+                </h3>
+                <p className="text-muted-foreground mb-4">
+                  {isDragOver 
+                    ? 'Release to upload your PDF document' 
+                    : 'Drag and drop your PDF here, or click to browse'
+                  }
+                </p>
+                <Button variant="default" className="cursor-pointer">
+                  <FileText className="h-4 w-4" />
                   Browse Files
                 </Button>
                 <input
@@ -203,7 +271,7 @@ const PDFPageExtractor = () => {
                       </div>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={resetApp}>
+                  <Button variant="ghost" size="sm" onClick={resetApp} className="cursor-pointer">
                     <X className="h-4 w-4" />
                   </Button>
                 </div>
@@ -253,7 +321,7 @@ const PDFPageExtractor = () => {
                     startPage < 1 ||
                     endPage > totalPages
                   }
-                  className="w-full"
+                  className="w-full cursor-pointer"
                   size="lg"
                 >
                   {isProcessing ? (
@@ -291,7 +359,6 @@ const PDFPageExtractor = () => {
           </DialogHeader>
           
           <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-0">
-            {/* Original PDF Section */}
             <div className="flex flex-col min-h-0 border-r">
               <div className="px-6 py-4 bg-muted/30 border-b">
                 <div className="flex items-center justify-between">
@@ -360,11 +427,11 @@ const PDFPageExtractor = () => {
           
           <div className="px-6 py-4 border-t bg-muted/20">
             <div className="flex gap-3">
-              <Button onClick={handleDownload} className="flex-1" size="lg">
+              <Button onClick={handleDownload} className="flex-1 cursor-pointer" size="lg">
                 <Download className="mr-2 h-5 w-5" />
                 Download Extracted PDF
               </Button>
-              <Button variant="outline" onClick={handleClosePreview} size="lg" className="px-8">
+              <Button variant="outline" onClick={handleClosePreview} size="lg" className="px-8 cursor-pointer">
                 <X className="mr-2 h-4 w-4" />
                 Close
               </Button>
