@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import { Scissors, Eye, AlertCircle } from "lucide-react";
+import { Scissors, Eye, AlertCircle, FileText } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -105,7 +105,7 @@ const PDFPageExtractor = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Scissors className="h-5 w-5" />
+              <FileText className="h-5 w-5" />
               {!file ? "Upload Document" : "Document Details"}
             </CardTitle>
           </CardHeader>
