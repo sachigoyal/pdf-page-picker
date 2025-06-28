@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import { siteConfig } from "@/lib/config/site.config";
-import next from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +22,11 @@ export const metadata: Metadata = {
   creator: siteConfig.name,
   icons: [
     {
-      url: "/favicon.png",
+      url: "/favicon-dark.png",
       media: "(prefers-color-scheme: light)",
     },
     {
-      url: "/favicon.png",
+      url: "/favicon-light.png",
       media: "(prefers-color-scheme: dark)",
     },
   ],
