@@ -45,10 +45,7 @@ export default function ModeToggle({ className, variant = "outline", size = "lg"
   };
 
   const toggleTheme = () => {
-    //@ts-ignore
     if (!document.startViewTransition) switchTheme();
-
-    //@ts-ignore
     document.startViewTransition(switchTheme);
   };
 
