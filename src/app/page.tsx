@@ -10,11 +10,11 @@ export default function Home() {
           href="https://github.com/sachigoyal/pdf-page-picker"
           target="_blank"
           rel="noopener noreferrer"
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+          className="p-3 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-full transition-colors"
         >
           <Icons.Github className="w-5 h-5" />
         </a>
-        <ModeToggle className="border-none bg-transparent cursor-pointer rounded-full" />
+        <ModeToggle className="border-none bg-transparent hover:bg-gray-100 cursor-pointer rounded-full" />
       </div>
       <PDFPageExtractor />
     </div>
